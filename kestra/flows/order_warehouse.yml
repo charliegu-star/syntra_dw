@@ -4,14 +4,6 @@ namespace: syntra.dw
 concurrency:
   limit: 1
 
-pluginDefaults:
-  - type: io.kestra.plugin.jdbc.mysql.Queries
-    values:
-      url: "{{ secret('DW_JDBC_URL') }}"
-      username: "{{ secret('DW_MYSQL_USERNAME') }}"
-      password: "{{ secret('DW_MYSQL_PASSWORD') }}"
-      transaction: true
-
 tasks:
   - id: refresh_order_warehouse
     type: io.kestra.plugin.core.flow.Dag
@@ -19,11 +11,19 @@ tasks:
       - task:
           id: dwd_order_detail
           type: io.kestra.plugin.jdbc.mysql.Queries
+          url: "{{ secret('DW_JDBC_URL') }}"
+          username: "{{ secret('DW_MYSQL_USERNAME') }}"
+          password: "{{ secret('DW_MYSQL_PASSWORD') }}"
+          transaction: true
           sql: "{{ read('sql/dwd_order_detail.sql') }}"
 
       - task:
           id: dws_user_order_day
           type: io.kestra.plugin.jdbc.mysql.Queries
+          url: "{{ secret('DW_JDBC_URL') }}"
+          username: "{{ secret('DW_MYSQL_USERNAME') }}"
+          password: "{{ secret('DW_MYSQL_PASSWORD') }}"
+          transaction: true
           sql: "{{ read('sql/dws_user_order_day.sql') }}"
         dependsOn:
           - dwd_order_detail
@@ -31,6 +31,10 @@ tasks:
       - task:
           id: ads_user_report
           type: io.kestra.plugin.jdbc.mysql.Queries
+          url: "{{ secret('DW_JDBC_URL') }}"
+          username: "{{ secret('DW_MYSQL_USERNAME') }}"
+          password: "{{ secret('DW_MYSQL_PASSWORD') }}"
+          transaction: true
           sql: "{{ read('sql/ads_user_report.sql') }}"
         dependsOn:
           - dws_user_order_day
