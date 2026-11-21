@@ -34,4 +34,4 @@ tasks:
 triggers:
   - id: poll_git
     type: io.kestra.plugin.core.trigger.Schedule
-    cron: "*/2 * * * *"
+    cron: "*/60 * * * *"
